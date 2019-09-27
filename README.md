@@ -12,7 +12,7 @@ brew install cairo pkg-config
 
 Install shabam:
 ```sh
-pip install git+git://github.com/dlrice/shabam.git --user
+pip install shabam
 ```
 
 ## The dream
@@ -29,16 +29,15 @@ seqplot('example.bam', chrom='1', start=30243, end=30321,
 - plot multiple sequence files together with a list of paths e.g.
   `['child.bam', 'mom.bam', 'dad.bam']`
 - export PDF, PNG, SVG or PS formatted plots with matching filename extensions
-- seqplot returns PNG data if you don't include an output filename
 
 ### Command line version
 ```sh
-./bin/shabam.py \
-  --seqfiles example.bam \
-  --chrom 2 \
+shabam \
+  --seqfiles tests/data/example.bam \
+  --chrom 1 \
   --start 30243 \
   --end 30321 \
-  --fastafile reference.fasta \
+  --fastafile tests/data/reference.fasta \
   --out plot.svg
 ```
 
