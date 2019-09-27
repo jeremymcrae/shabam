@@ -4,10 +4,10 @@ python:
   - 3.7
 before_install:
  - sudo apt-get install -y libcairo2-dev pkg-config
- - pip install coveralls
+ - pip install --only-binary=all coveralls pycairo pysam
 script:
- - python setup.py test
  - python -m coverage run --source=./shabam setup.py test
+ - python setup.py install
  - shabam --seqfiles ./tests/data/example.bam --chrom 1 --start 30000 \
     --end 30400 --fastafile ./tests/data/reference.fasta --out plot.svg
 after_success:
