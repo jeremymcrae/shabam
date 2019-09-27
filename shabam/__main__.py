@@ -24,7 +24,7 @@ def main():
     
     args = parser.parse_args()
     
-    seqplot(args.seqfiles, args.fastafile, args.chrom, args.start, args.end,
+    seqplot(args.seqfiles, args.chrom, args.start, args.end, args.fastafile,
         args.out, args.by_strand)
 
 if __name__ == '__main__':
