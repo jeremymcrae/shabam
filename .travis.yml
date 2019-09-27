@@ -8,5 +8,7 @@ before_install:
 script:
  - python setup.py test
  - python -m coverage run --source=./shabam setup.py test
+ - shabam --seqfiles ./tests/data/example.bam --chrom 1 --start 30000 \
+    --end 30400 --fastafile ./tests/data/reference.fasta --out plot.svg
 after_success:
  - coveralls
