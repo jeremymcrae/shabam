@@ -3,7 +3,7 @@ import os
 import unittest
 import tempfile
 
-import cairocffi as cairo
+import cairo
 
 from shabam.utils import get_height, fileformat
 

@@ -10,13 +10,17 @@ setup(
     license = "GPL",
     packages=["shabam"],
     install_requires=['pysam >= 0.9.0',
-                      'cairocffi >= 0.7.0',
+                      'pycairo >= 1.11.0',
     ],
+    entry_points={'console_scripts': ['shabam = shabam.__main__:main']},
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "Topic :: Scientific/Engineering :: Visualization",
     ],
-    test_suite="tests"
+    python_requires=">=3.6",
+    test_suite="tests",
+    tests_require=['Pillow >= 4.0',
+    ]
 )

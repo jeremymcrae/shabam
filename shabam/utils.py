@@ -3,7 +3,7 @@ import os
 from collections import OrderedDict
 
 import pysam
-import cairocffi as cairo
+import cairo
 
 from shabam.parse_reads import parse_read
 

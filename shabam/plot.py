@@ -3,7 +3,7 @@ import os
 from collections import OrderedDict
 
 import pysam
-import cairocffi as cairo
+import cairo
 
 from shabam.parse_reads import parse_read
 from shabam.plot_reads import plot_read
@@ -71,7 +71,7 @@ def insert_spacer(context, coords, start, end):
         
         if line != 'blank':
             width = (end - start) * 10
-            context.rectangle(x=0, y=max(coords) + 10, width=width, height=10)
+            context.rectangle(0, max(coords) + 10, width, 10)
             context.set_source_rgba(0.4, 0.4, 0.4, 1.0)
             context.fill()
 
@@ -126,7 +126,7 @@ def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False):
     if out_type == 'png':
         surface.write_to_png(out)
     elif out_type is None:
-        return surface.write_to_png()
+        return surface.get_data()
 
 def covplot(seqfiles, chrom, start, end, fastafile, out=None):
     '''

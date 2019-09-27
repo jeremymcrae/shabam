@@ -40,7 +40,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
             strand = {True: 'r', False: 'f'}[is_reverse]
             base = 'M_{}'.format(strand)
         
-        context.rectangle(x=x_pos, y=y_offset, width=10, height=10)
+        context.rectangle(x_pos, y_offset, 10, 10)
         context.set_source_rgba(*(COLORS[base] + [to_alpha(qual)]))
         context.fill()
 

@@ -1,5 +1,5 @@
 
-import cairocffi as cairo
+import cairo
 from shabam.colors import COLORS
 from shabam.plot_reads import to_alpha
 

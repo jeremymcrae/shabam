@@ -4,7 +4,13 @@ import unittest
 import os
 import hashlib
 
+from PIL import Image
+
 from shabam import seqplot
+
+def checksum_file(path):
+    with open(path, 'rb') as handle:
+        return hashlib.sha1(handle.read()).hexdigest()
 
 class TestPlot(unittest.TestCase):
     
@@ -19,8 +25,12 @@ class TestPlot(unittest.TestCase):
         # check that we make a plot with the correct image. check this by
         # returning png data, then getting the sha1 digest. This will fail if
         # a single bit chenges, so perhaps this is too stringent.
-        data = seqplot([path], chrom='1', start=30000, end=30400, fastafile=fasta)
-        checksum = hashlib.sha1(data).hexdigest()
+        first = tempfile.NamedTemporaryFile(suffix='.png')
+        seqplot([path], chrom='1', start=30000, end=30400, fastafile=fasta,
+            out=first.name)
+        
+        # test we don't get the empty file checksum, the file has some content
+        self.assertNotEqual(checksum_file(first.name), 'da39a3ee5e6b4b0d3255bfef95601890afd80709')
         
         # now try writing a plot to PNG file.
         single = tempfile.NamedTemporaryFile(suffix='.png')
@@ -28,11 +38,8 @@ class TestPlot(unittest.TestCase):
             out=single.name)
         
         self.assertTrue(os.path.getsize(single.name) > 0)
-        # check we have written the same data as would be returned
-        with open(single.name, 'rb') as handle:
-            singlechecksum = hashlib.sha1(handle.read()).hexdigest()
-        
-        self.assertEqual(checksum, singlechecksum)
+        # check we have written the same data between runs
+        self.assertEqual(checksum_file(first.name), checksum_file(single.name))
         
         # now check we can plot multiple sequence files in a single image
         double = tempfile.NamedTemporaryFile(suffix='.png')
@@ -42,9 +49,7 @@ class TestPlot(unittest.TestCase):
         
         # check that the sha1 hash does not match the earlier one. this may
         # be excessive.
-        with open(double.name, 'rb') as handle:
-            doublechecksum = hashlib.sha1(handle.read()).hexdigest()
-        self.assertNotEqual(singlechecksum, doublechecksum)
+        self.assertNotEqual(checksum_file(single.name), checksum_file(double.name))
     
     def test_seqplot_by_strand(self):
         ''' test that we can plot bam, and color reads by strand
