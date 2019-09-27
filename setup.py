@@ -1,4 +1,5 @@
 
+import io
 from setuptools import setup
 
 setup(
@@ -7,6 +8,8 @@ setup(
     author = "Daniel Rice",
     author_email = "daniel.rice@sanger.ac.uk",
     description = ("Easy sequence alignment plots"),
+    long_description=io.open('README.md', encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
     license = "GPL",
     packages=["shabam"],
     install_requires=['pysam >= 0.9.0',
