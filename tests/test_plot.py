@@ -51,6 +51,21 @@ class TestPlot(unittest.TestCase):
         # be excessive.
         self.assertNotEqual(checksum_file(single.name), checksum_file(double.name))
     
+    def test_seqplot_png(self):
+        ''' test that a seqplot PNG is the right shape
+        '''
+        folder = os.path.dirname(__file__)
+        path = os.path.join(folder, 'data', 'example.bam')
+        fasta = os.path.join(folder, 'data', 'reference.fasta')
+        
+        first = tempfile.NamedTemporaryFile(suffix='.png')
+        seqplot([path], chrom='1', start=30000, end=30400, fastafile=fasta,
+            out=first.name)
+        
+        # test basic characteristics of the written png
+        im = Image.open(first.name)
+        self.assertEqual(im.size, (4000, 615))
+    
     def test_seqplot_by_strand(self):
         ''' test that we can plot bam, and color reads by strand
         '''
