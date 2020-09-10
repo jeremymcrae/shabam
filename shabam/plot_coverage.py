@@ -27,7 +27,7 @@ def plot_coverage(context, coverage, y_offset=0, x_offset=0, width=None, cov_hei
         height = sum(cov.values())/max_cov * cov_height
         
         # plot a gray box for the current base
-        context.rectangle(x_pos, bottom-height, 0, height)
+        context.rectangle(x_pos, bottom-height, 10, height)
         context.set_source_rgba(*(COLORS['M'] + [to_alpha(100)]))
         context.fill()
         
