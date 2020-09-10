@@ -41,7 +41,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
             base = f'M_{strand}'
         
         context.rectangle(x_pos, y_offset, 10, 10)
-        context.set_source_rgba(*(COLORS[base] + [to_alpha(qual)]))
+        context.set_source_rgba(*(COLORS[base.upper()] + [to_alpha(qual)]))
         context.fill()
 
 def to_alpha(qual, threshold=35):
