@@ -62,7 +62,7 @@ def fileformat(filename, width, height):
     else:
         ext = None
     
-    assert ext in ['png', 'pdf', 'ps', 'svg', None], 'unknown format: .{}'.format(ext)
+    assert ext in ['png', 'pdf', 'ps', 'svg', None], f'unknown format: .{ext}'
     
     if ext == 'pdf':
         surface = cairo.PDFSurface(filename, width, height)

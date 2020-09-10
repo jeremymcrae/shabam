@@ -38,7 +38,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
         
         if base == 'M' and by_strand:
             strand = {True: 'r', False: 'f'}[is_reverse]
-            base = 'M_{}'.format(strand)
+            base = f'M_{strand}'
         
         context.rectangle(x_pos, y_offset, 10, 10)
         context.set_source_rgba(*(COLORS[base] + [to_alpha(qual)]))
