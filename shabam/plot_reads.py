@@ -4,7 +4,7 @@ from __future__ import division
 from shabam.colors import COLORS
 
 def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
-        is_reverse=False, by_strand=False):
+        is_reverse=False, by_strand=False, merge_delta=0.05):
     ''' plots the bases in a read to a cairocffi.Context
     
     Args:
@@ -16,6 +16,8 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
         width: with of image in pixels
         is_reverse: whether the read is for the reverse strand
         by_strand: boolean for whether we want to shade reads by strand
+        merge_delta: fractional difference permissable between neighboring 
+            qualities before we stop merging
     '''
     
     if quals is None:
@@ -24,8 +26,33 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
     if width is None:
         width = len(bases) * 10
     
-    for i, (base, qual) in enumerate(zip(bases, quals)):
+    i = 0
+    while i < len(bases):
+        base = bases[i]
+        qual = quals[i]
         x_pos = (x_offset + i) * 10
+        
+        # collapse adjacent bases if they have the same base call and quality
+        delta = 1
+        next_base = bases[i + delta] if (i + delta) < len(bases) else None
+        next_qual = quals[i + delta] if (i + delta) < len(bases) else None
+        
+        # account for deleted bases with qual of '-'
+        qual = 100 if isinstance(qual, str) else qual
+        next_qual = qual if isinstance(next_qual, str) else next_qual
+        
+        while (base == next_base) and (abs(1 - next_qual / qual) <  merge_delta):
+            next_base = bases[i + delta] if (i + delta) < len(bases) else None
+            next_qual = quals[i + delta] if (i + delta) < len(bases) else None
+            next_qual = qual if isinstance(next_qual, str) else next_qual
+            delta += 1
+        
+        i += delta
+        
+        if x_pos < 0 and x_pos + delta * 10 > 0:
+            delta -= abs(x_pos) / 10
+            x_pos = 0
+        
         if x_pos < 0 or x_pos > width - 1:
             # don't plot bases outside the required window. This is necessary
             # when plotting SVGs, otherwise the SVG includes the outside bases.
@@ -40,7 +67,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
             strand = {True: 'r', False: 'f'}[is_reverse]
             base = f'M_{strand}'
         
-        context.rectangle(x_pos, y_offset, 10, 10)
+        context.rectangle(x_pos, y_offset, 10 * delta, 10)
         context.set_source_rgba(*(COLORS[base.upper()] + [to_alpha(qual)]))
         context.fill()
 
