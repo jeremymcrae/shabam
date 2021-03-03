@@ -63,8 +63,8 @@ class TestPlot(unittest.TestCase):
             out=first.name)
         
         # test basic characteristics of the written png
-        im = Image.open(first.name)
-        self.assertEqual(im.size, (4000, 615))
+        with Image.open(first.name) as im:
+            self.assertEqual(im.size, (4000, 615))
     
     def test_seqplot_by_strand(self):
         ''' test that we can plot bam, and color reads by strand
