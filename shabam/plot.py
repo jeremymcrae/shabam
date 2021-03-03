@@ -111,7 +111,7 @@ def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False, m
     
     depths = [axis_offset]
     for seqfile in seqfiles:
-        seq = pysam.AlignmentFile(seqfile, 'rb')
+        seq = pysam.AlignmentFile(seqfile, 'r')
         coords = OrderedDict({max(depths): -1e9})
         reps = ( parse_read(x, coords, ref, start) for x in seq.fetch(chrom, start, end) )
         
