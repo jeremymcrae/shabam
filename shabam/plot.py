@@ -14,7 +14,7 @@ from shabam.plot_coverage import plot_coverage
 from shabam.coverage import get_coverage
 
 def _plot(context, reads, start, end, axis_offset, height, ref_seq=None,
-        by_strand=False):
+        by_strand=False, merge_delta=0.05):
     ''' plots reads to the Context
     
     Args:
@@ -26,6 +26,7 @@ def _plot(context, reads, start, end, axis_offset, height, ref_seq=None,
         height: total height of the plotted image in pixels.
         ref_seq: reference sequence within plotting window (or None)
         by_strand: whether to shade reads by strand
+        merge_delta: difference allowed between neighboring qualities before not merging
     
     Returns:
         max end position at each row, indexed by row number
@@ -43,7 +44,7 @@ def _plot(context, reads, start, end, axis_offset, height, ref_seq=None,
         
         plot_read(context, read['bases'], read['qualities'],
             read['position'] - start, read['offset'], width, read['is_reverse'],
-            by_strand)
+            by_strand, merge_delta)
     
     plot_axis(context, start, end, axis_offset - 10)
     plot_grid(context, start, end, axis_offset, height)
@@ -77,7 +78,7 @@ def insert_spacer(context, coords, start, end):
 
     return coords
 
-def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False):
+def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False, merge_delta=0.05):
     ''' the plotting function
     
     Args:
@@ -88,6 +89,7 @@ def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False):
         fastafile: path to reference FASTA file.
         out: path to write image file to, or None to return bytes-encoded png
         by_strand: whether to shade reads by strand
+        merge_delta: difference allowed between neighboring qualities before not merging
     
     Returns:
         None, or if out is None, returns image plot as bytes-encoded png
@@ -113,7 +115,7 @@ def seqplot(seqfiles, chrom, start, end, fastafile, out=None, by_strand=False):
         coords = OrderedDict({max(depths): -1e9})
         reps = ( parse_read(x, coords, ref, start) for x in seq.fetch(chrom, start, end) )
         
-        _plot(context, reps, start, end, axis_offset, height, reference, by_strand)
+        _plot(context, reps, start, end, axis_offset, height, reference, by_strand, merge_delta)
         reference = None # don't plot the reference in subsequent BAMs
         
         if seqfiles.index(seqfile) < len(seqfiles) - 1:

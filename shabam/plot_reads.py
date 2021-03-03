@@ -16,8 +16,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
         width: with of image in pixels
         is_reverse: whether the read is for the reverse strand
         by_strand: boolean for whether we want to shade reads by strand
-        merge_delta: fractional difference permissable between neighboring 
-            qualities before we stop merging
+        merge_delta: difference allowed between neighboring qualities before not merging
     '''
     
     if quals is None:
