@@ -24,6 +24,6 @@ setup(
     ],
     python_requires=">=3.6",
     test_suite="tests",
-    tests_require=['Pillow >= 4.0',
-    ]
+    extras_require={'test': {'Pillow >= 4.0'},
+    }
 )
