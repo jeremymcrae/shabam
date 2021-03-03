@@ -40,7 +40,7 @@ def plot_read(context, bases, quals=None, x_offset=0, y_offset=0, width=None,
         qual = 100 if isinstance(qual, str) else qual
         next_qual = qual if isinstance(next_qual, str) else next_qual
         
-        while (base == next_base) and (abs(1 - next_qual / qual) <  merge_delta):
+        while (base == next_base) and (abs(1 - relative_qual(qual, next_qual)) <  merge_delta):
             next_base = bases[i + delta] if (i + delta) < len(bases) else None
             next_qual = quals[i + delta] if (i + delta) < len(bases) else None
             next_qual = qual if isinstance(next_qual, str) else next_qual
@@ -77,6 +77,23 @@ def to_alpha(qual, threshold=35):
         return min(threshold, qual)/threshold
     except TypeError:
         return 1.0
+
+def relative_qual(qual: int, next_qual: int):
+    ''' get the relative quality between two quality scores
+    
+    Has to handle cases where one or both scores are zero
+    
+    Args:
+        qual: 
+        next_qual:
+    
+    Returns:
+        ratio of scores to each other
+    '''
+    if qual == 0:
+        return 0 if (next_qual == 0 and qual == 0) else 1
+    else:
+        return next_qual / qual
 
 def plot_insertion(context, bases, x_pos, y_offset):
     ''' plot inserted bases at the insertion site
